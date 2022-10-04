@@ -15,7 +15,6 @@ import com.orels.stock_price.ui.theme.StockPriceTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             StockPriceTheme {
                 // A surface container using the 'background' color from the theme
