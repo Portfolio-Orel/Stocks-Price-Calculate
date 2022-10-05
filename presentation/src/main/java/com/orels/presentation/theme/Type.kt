@@ -1,4 +1,4 @@
-package com.orels.stock_price.ui.theme
+package com.orels.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
