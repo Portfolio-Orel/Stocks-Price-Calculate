@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main">main</string>
+    <string name="error_occurred">An error has occurred</string>
+    <string name="no_ticker">No ticker</string>
+    <string name="free_cashflow_yield">Free Cashflow Yield: </string>
+    <string name="price_to_buy">Price to buy: </string>
+    <string name="price_to_sell">Price to sell: </string>
+    <string name="irr_">IRR: </string>
 </resources>

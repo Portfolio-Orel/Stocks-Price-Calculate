@@ -1,4 +1,4 @@
-package com.orels.presentation.util
+package com.orels.domain.use_case
 
 /**
  * @author Orel Zilberman

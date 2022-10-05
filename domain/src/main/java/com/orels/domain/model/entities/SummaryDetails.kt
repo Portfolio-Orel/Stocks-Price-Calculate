@@ -5,6 +5,6 @@ package com.orels.domain.model.entities
  * 05/10/2022
  */
 class SummaryDetails(
-    val trailingPE: Base? = null,
-    val forwardPE: Base? = null
+    val trailingPE: Base = Base(),
+    val forwardPE: Base = Base()
 )

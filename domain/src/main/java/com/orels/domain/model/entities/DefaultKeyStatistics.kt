@@ -5,16 +5,16 @@ package com.orels.domain.model.entities
  * 05/10/2022
  */
 class DefaultKeyStatistics (
-    val enterpriseToRevenue: Base? = null,
-    val sharesOutstanding: Base? = null,
-    val sharesShort: Base? = null,
-    val trailingEps: Base? = null,
-    val heldPercentInsiders: Base? = null,
-    val beta: Base? = null,
-    val enterpriseValue: Base? = null,
-    val forwardPE: Base? = null,
-    val impliedSharesOutstanding: Base? = null,
-    val priceToBook: Base? = null,
+    val enterpriseToRevenue: Base = Base(),
+    val sharesOutstanding: Base = Base(),
+    val sharesShort: Base = Base(),
+    val trailingEps: Base = Base(),
+    val heldPercentInsiders: Base = Base(),
+    val beta: Base = Base(),
+    val enterpriseValue: Base = Base(),
+    val forwardPE: Base = Base(),
+    val impliedSharesOutstanding: Base = Base(),
+    val priceToBook: Base = Base()
 ) {
 
 }
