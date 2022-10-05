@@ -1,4 +1,4 @@
-package com.orels.mylibrary
+package com.orels.data
 
 import org.junit.Test
 
