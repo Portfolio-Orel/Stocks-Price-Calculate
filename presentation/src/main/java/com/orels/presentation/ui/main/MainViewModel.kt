@@ -4,12 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.orels.domain.model.entities.Stock
-import com.orels.domain.model.interactors.Repository
+import androidx.lifecycle.viewModelScope
+import com.orels.domain.use_case.Resource
+import com.orels.domain.use_case.get_stock.GetStockUseCase
+import com.orels.presentation.R
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 /**
@@ -19,18 +20,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: Repository
+    private val getStockUseCase: GetStockUseCase,
 ) : ViewModel() {
     var state by mutableStateOf(MainState())
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val stock: Stock = repository.getStock("AMZN")
-                println(stock.summaryDetails)
-            } catch(e: Exception) {
-                print("e: $e")
+        setStock("AAPL")
+    }
+
+    fun setStock(ticker: String) {
+        getStockUseCase(ticker = ticker).onEach { result ->
+            state = when (result) {
+                is Resource.Error -> state.copy(
+                    isLoading = false, error = R.string.error_occurred
+                )
+                is Resource.Loading -> state.copy(isLoading = true)
+                is Resource.Success -> state.copy(isLoading = false, selectedStock = result.data)
             }
-        }
+        }.launchIn(viewModelScope)
     }
 }
