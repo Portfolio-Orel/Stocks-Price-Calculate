@@ -7,16 +7,16 @@ import com.google.gson.annotations.SerializedName
  * 05/10/2022
  */
 class DefaultKeyStatistics (
-    @SerializedName("enterpriseToRevenue") val enterpriseToRevenue: BaseResponse,
-    @SerializedName("sharesOutstanding") val sharesOutstanding: BaseResponse,
-    @SerializedName("sharesShort") val sharesShort: BaseResponse,
-    @SerializedName("trailingEps") val trailingEps: BaseResponse,
-    @SerializedName("heldPercentInsiders") val heldPercentInsiders: BaseResponse,
-    @SerializedName("beta") val beta: BaseResponse,
-    @SerializedName("enterpriseValue") val enterpriseValue: BaseResponse,
-    @SerializedName("forwardPE") val forwardPE: BaseResponse,
-    @SerializedName("impliedSharesOutstanding") val impliedSharesOutstanding: BaseResponse,
-    @SerializedName("priceToBook") val priceToBook: BaseResponse,
+    @SerializedName("enterpriseToRevenue") val enterpriseToRevenue: BaseResponse? = null,
+    @SerializedName("sharesOutstanding") val sharesOutstanding: BaseResponse? = null,
+    @SerializedName("sharesShort") val sharesShort: BaseResponse? = null,
+    @SerializedName("trailingEps") val trailingEps: BaseResponse? = null,
+    @SerializedName("heldPercentInsiders") val heldPercentInsiders: BaseResponse? = null,
+    @SerializedName("beta") val beta: BaseResponse? = null,
+    @SerializedName("enterpriseValue") val enterpriseValue: BaseResponse? = null,
+    @SerializedName("forwardPE") val forwardPE: BaseResponse? = null,
+    @SerializedName("impliedSharesOutstanding") val impliedSharesOutstanding: BaseResponse? = null,
+    @SerializedName("priceToBook") val priceToBook: BaseResponse? = null,
 ) {
 
 }

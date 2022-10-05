@@ -8,43 +8,43 @@ import com.google.gson.annotations.SerializedName
  */
 class FinancialData(
     @SerializedName("ebitdaMargins")
-    val ebitdaMargins: BaseResponse,
+    val ebitdaMargins: BaseResponse? = null,
     @SerializedName("profitMargins")
-    val profitMargins: BaseResponse,
+    val profitMargins: BaseResponse? = null,
     @SerializedName("grossMargins")
-    val grossMargins: BaseResponse,
+    val grossMargins: BaseResponse? = null,
     @SerializedName("operatingCashflow")
-    val operatingCashflow: BaseResponse,
+    val operatingCashflow: BaseResponse? = null,
     @SerializedName("operatingMargins")
-    val operatingMargins: BaseResponse,
+    val operatingMargins: BaseResponse? = null,
     @SerializedName("ebitda")
-    val ebitda: BaseResponse,
+    val ebitda: BaseResponse? = null,
     @SerializedName("grossProfits")
-    val grossProfits: BaseResponse,
+    val grossProfits: BaseResponse? = null,
     @SerializedName("freeCashflow")
-    val freeCashflow: BaseResponse,
+    val freeCashflow: BaseResponse? = null,
     @SerializedName("targetMedianPrice")
-    val targetMedianPrice: BaseResponse,
+    val targetMedianPrice: BaseResponse? = null,
     @SerializedName("currentPrice")
-    val currentPrice: BaseResponse,
+    val currentPrice: BaseResponse? = null,
     @SerializedName("returnOnAssets")
-    val returnOnAssets: BaseResponse,
+    val returnOnAssets: BaseResponse? = null,
     @SerializedName("numberOfAnalystOpinions")
-    val targetMeanPrice: BaseResponse,
+    val targetMeanPrice: BaseResponse? = null,
     @SerializedName("debtToEquity")
-    val debtToEquity: BaseResponse,
+    val debtToEquity: BaseResponse? = null,
     @SerializedName("returnOnEquity")
-    val returnOnEquity: BaseResponse,
+    val returnOnEquity: BaseResponse? = null,
     @SerializedName("targetHighPrice")
-    val targetHighPrice: BaseResponse,
+    val targetHighPrice: BaseResponse? = null,
     @SerializedName("totalCash")
-    val totalCash: BaseResponse,
+    val totalCash: BaseResponse? = null,
     @SerializedName("totalDebt")
-    val totalDebt: BaseResponse,
+    val totalDebt: BaseResponse? = null,
     @SerializedName("totalRevenue")
-    val totalRevenue: BaseResponse,
+    val totalRevenue: BaseResponse? = null,
     @SerializedName("totalCashPerShare")
-    val totalCashPerShare: BaseResponse,
+    val totalCashPerShare: BaseResponse? = null,
     @SerializedName("financialCurrency")
     val financialCurrency: String? = null,
 )

@@ -37,9 +37,11 @@ object AppModule {
     @Provides
     @Singleton
     fun provideApi(
-        @BaseUrl baseUrl: String
+        @BaseUrl baseUrl: String,
+        client: OkHttpClient
     ): StocksAPI {
         return Retrofit.Builder()
+            .client(client)
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

@@ -5,7 +5,7 @@ package com.orels.domain.model.entities
  * 05/10/2022
  */
 class Stock(
-    private val financialData: FinancialData,
-    private val defaultKeyStatistics: DefaultKeyStatistics,
-    private val summaryDetails: SummaryDetails
+    val financialData: FinancialData? = null,
+    val defaultKeyStatistics: DefaultKeyStatistics? = null,
+    val summaryDetails: SummaryDetails? = null
 )

@@ -7,6 +7,6 @@ import com.google.gson.annotations.SerializedName
  * 05/10/2022
  */
 class SummaryDetails(
-    @SerializedName("trailingPE") val trailingPE: BaseResponse,
+    @SerializedName("trailingPE") val trailingPE: BaseResponse? = null,
     @SerializedName("forwardPE") val forwardPE: BaseResponse
 )
