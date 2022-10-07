@@ -10,6 +10,7 @@ import com.orels.presentation.R
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int) {
     object Main : Screen(route = "main", resourceId = R.string.main)
+    object Results: Screen(route = "results", resourceId = R.string.results_screen)
 
     fun withArgs(vararg args: String?): String =
         buildString {

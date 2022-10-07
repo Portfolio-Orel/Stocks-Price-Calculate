@@ -1,5 +1,7 @@
 package com.orels.data.remote
 
+import com.orels.data.local.LocalDatabase
+import com.orels.data.local.StockDao
 import com.orels.data.remote.model.entities.BaseResponse
 import com.orels.data.remote.model.entities.StockResponse
 import com.orels.domain.model.entities.*
@@ -11,10 +13,20 @@ import javax.inject.Inject
  * 05/10/2022
  */
 class RepositoryImpl @Inject constructor(
-    private val api: StocksAPI
+    private val api: StocksAPI,
+    private val localDatabase: LocalDatabase
 ) : Repository {
-    override suspend fun getStock(ticker: String): Stock =
-        api.getStockDetails(ticker = ticker).toStock()
+    private val db: StockDao = this.localDatabase.stockDao
+
+
+    override suspend fun getStock(ticker: String): Stock? {
+        var stock = db.get(ticker = ticker)
+        if(stock == null) {
+            stock = api.getStockDetails(ticker = ticker).toStock()
+        }
+        db.insert(stock)
+         return stock
+    }
 }
 
 fun BaseResponse?.toBase(): Base = Base(raw = this?.raw, fmt = this?.fmt)
@@ -56,5 +68,6 @@ fun StockResponse.toStock(): Stock = Stock(
         trailingPE = summaryDetails?.trailingPE?.toBase() ?: Base(),
         forwardPE = summaryDetails?.forwardPE?.toBase() ?: Base()
     ),
-    ticker = symbol
+    ticker = symbol ?: "",
+    name = quoteType.longName ?: quoteType.shortName
 )

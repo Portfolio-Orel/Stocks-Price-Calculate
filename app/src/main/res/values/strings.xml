@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Stock-Price</string>
+    <string name="local_db_name">stock_price_local_db</string>
 </resources>

@@ -1,20 +1,27 @@
 package com.orels.presentation.ui.main
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.orels.domain.model.entities.Stock
 import com.orels.presentation.R
+import com.orels.presentation.ui.components.Input
+import com.orels.presentation.ui.components.TextStyle
+import com.orels.presentation.util.Screen
 
 /**
  * @author Orel Zilberman
@@ -25,58 +32,48 @@ fun MainScreen(
     navController: NavController,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+
     val state = viewModel.state
-    if (state.isLoading) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .height(32.dp)
-                .width(32.dp),
-            strokeWidth = 2.dp,
-            color = MaterialTheme.colorScheme.onBackground
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Input(
+            modifier = Modifier.padding(12.dp),
+            textStyle = TextStyle.AllCaps,
+            title = stringResource(R.string.stock_ticker),
+            placeholder = stringResource(R.string.meta_ticker),
+            isPassword = false,
+            leadingIcon = {},
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.Search,
+                    contentDescription = stringResource(
+                        R.string.search_stock
+                    )
+                )
+            },
+            onTextChange = viewModel::onTickerChange
         )
-    } else {
-        if (state.error != null) {
+        Button(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp),
+            onClick = {
+                if(state.ticker.isNotEmpty()) {
+                    navController.navigate(Screen.Results.withArgs(state.ticker))
+                }
+            }
+        ) {
             Text(
-                text = stringResource(state.error),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.error
+                text = stringResource(R.string.search),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.background
             )
         }
-        state.selectedStock?.let { Content(it) }
-    }
-}
-
-@Composable
-fun Content(stock: Stock) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = stock.ticker ?: stringResource(R.string.no_ticker),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Text(
-            text = stringResource(R.string.free_cashflow_yield) + stock.getFreeCashflowYieldFmt(),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Text(
-            text = stringResource(R.string.price_to_buy) + stock.getExpectedDetails().priceToBuyByEarnings,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Text(
-            text = stringResource(R.string.price_to_sell) + stock.getExpectedDetails().priceToSell,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Text(
-            text = stringResource(R.string.irr_) + stock.getExpectedDetails().irr,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onBackground
-        )
     }
 }

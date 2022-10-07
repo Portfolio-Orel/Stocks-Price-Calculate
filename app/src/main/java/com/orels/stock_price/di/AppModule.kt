@@ -1,9 +1,14 @@
 package com.orels.stock_price.di
 
+import android.app.Application
+import androidx.room.Room
+import com.orels.data.local.LocalDatabase
+import com.orels.data.local.type_converters.Converters
 import com.orels.data.remote.RepositoryImpl
 import com.orels.data.remote.StocksAPI
 import com.orels.data.remote.interceptor.AuthInterceptor
 import com.orels.domain.model.interactors.Repository
+import com.orels.stock_price.R
 import com.orels.stock_price.di.annotation.BaseUrl
 import dagger.Module
 import dagger.Provides
@@ -23,6 +28,20 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    fun provideLocalDatabase(context: Application): LocalDatabase =
+        with(context) {
+            Room.databaseBuilder(
+                context,
+                LocalDatabase::class.java,
+                getString(R.string.local_db_name)
+            )
+                .addTypeConverter(Converters())
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build()
+        }
 
     @Provides
     fun provideOkHttpClient(
@@ -55,8 +74,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCoinRepository(api: StocksAPI): Repository {
-        return RepositoryImpl(api)
+    fun provideCoinRepository(api: StocksAPI, localDatabase: LocalDatabase): Repository {
+        return RepositoryImpl(api, localDatabase = localDatabase)
     }
 
 }

@@ -16,7 +16,7 @@ import javax.inject.Inject
 class GetStockUseCase @Inject constructor(
     private val repository: Repository
 ) {
-    operator fun invoke(ticker: String): Flow<Resource<Stock>> = flow {
+    operator fun invoke(ticker: String): Flow<Resource<Stock?>> = flow {
         try {
             emit(Resource.Loading())
             val stock = repository.getStock(ticker = ticker)

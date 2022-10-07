@@ -7,5 +7,5 @@ import com.orels.domain.model.entities.Stock
  * 05/10/2022
  */
 interface Repository {
-    suspend fun getStock(ticker: String): Stock
+    suspend fun getStock(ticker: String): Stock?
 }

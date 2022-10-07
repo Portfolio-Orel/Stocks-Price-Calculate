@@ -1,10 +1,16 @@
 package com.orels.domain.model.entities
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.util.*
+
 /**
  * @author Orel Zilberman
  * 05/10/2022
  */
+@Entity
 class FinancialData(
+    @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val ebitdaMargins: Base = Base(),
     val profitMargins: Base = Base(),
     val grossMargins: Base = Base(),
