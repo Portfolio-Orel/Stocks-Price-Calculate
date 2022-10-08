@@ -3,9 +3,9 @@ package com.orels.presentation.ui.stock_price
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.orels.domain.model.entities.ExpectedStockDetails
@@ -31,6 +31,7 @@ import com.orels.presentation.ui.components.Input
  * @author Orel Zilberman
  * 06/10/2022
  */
+
 @Composable
 fun ResultsScreen(
     ticker: String,
@@ -78,7 +79,6 @@ fun Content(
     fields: List<StockResultsDataFields>
 ) {
 
-    val lazyColumnState = rememberLazyListState()
     if (expectedStockDetails == null) {
         Text(
             modifier = Modifier.padding(16.dp),
@@ -95,18 +95,24 @@ fun Content(
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f))
-                    .offset {
-                        IntOffset(
-                            0,
-                            0
-                        )
-                    },
+                    .zIndex(2f)
+                    .imePadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Data(
                     title = StockText(
                         text = "${stock.name}(${stock.ticker})",
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                )
+                Data(
+                    title = StockText(
+                        text = stringResource(R.string.current_price_),
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                    ),
+                    value = StockText(
+                        text = "${stock.priceFmt ?: 0}$",
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 )
@@ -143,25 +149,19 @@ fun Content(
                     )
                 )
             }
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .fillMaxWidth(1F)
-                    .heightIn(max = 2000.dp),
-                state = lazyColumnState,
+                    .fillMaxWidth(1f)
+                    .zIndex(1f)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(
-                    count = fields.size,
-                    key = { index ->
-                        // Return a stable + unique key for the item
-                        index
-                    }
-                ) { index ->
+                fields.forEach { field ->
                     Input(
-                        title = stringResource(id = fields[index].title),
-                        placeholder = fields[index].defaultValue.toString(),
+                        title = stringResource(id = field.title),
+                        placeholder = field.defaultValue.toString(),
                         isPassword = false,
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.None,
@@ -172,10 +172,9 @@ fun Content(
                         leadingIcon = {},
                         trailingIcon = {},
                         onTextChange = {
-                            fields[index].onChange(it.toDoubleOrNull() ?: -1.0)
+                            field.onChange(it.toDoubleOrNull() ?: -1.0)
                         },
                     )
-
                 }
             }
         }
@@ -195,6 +194,7 @@ fun Data(
             color = title.color
         )
         Text(
+            modifier = Modifier.padding(horizontal = 4.dp),
             text = value.text,
             style = MaterialTheme.typography.titleLarge,
             color = value.color

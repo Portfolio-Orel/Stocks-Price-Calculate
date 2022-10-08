@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -36,7 +34,6 @@ fun Input(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     title: String = "",
     placeholder: String = "",
-    initialText: String = "",
     minLines: Int = 1,
     maxLines: Int = 1,
     isError: Boolean = false,
@@ -46,7 +43,7 @@ fun Input(
     trailingIcon: @Composable (() -> Unit) = { },
     onTextChange: (String) -> Unit = {}
 ) {
-    val value = remember { mutableStateOf(initialText) }
+    var value by remember { mutableStateOf("") }
     val passwordVisible = rememberSaveable { mutableStateOf(false) }
     val lineHeight = 40
     val focusRequester = FocusRequester()
@@ -63,9 +60,9 @@ fun Input(
                 modifier = inputModifier
                     .fillMaxWidth()
                     .focusable(enabled = shouldFocus),
-                value = transformString(textStyle = textStyle, text = value.value),
+                value = transformString(textStyle = textStyle, text = value),
                 onValueChange = {
-                    value.value = it
+                    value = it
                     onTextChange(it)
                 },
                 placeholder = {

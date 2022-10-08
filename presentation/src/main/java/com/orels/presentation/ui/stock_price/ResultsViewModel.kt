@@ -41,6 +41,7 @@ class ResultsViewModel @Inject constructor(
                 is Resource.Success -> {
                     val stockResultsData = state.stockResultsData
                     stockResultsData.startingPrice = result.data?.price ?: -1.0
+                    setExpectedStockDetails(stock = result.data, stockResultsData = stockResultsData)
                     result.data?.let { setFields(stockResultsData = stockResultsData, it) }
                     state.copy(
                         isLoading = false,
@@ -116,9 +117,18 @@ class ResultsViewModel @Inject constructor(
         )
     }
 
-    private fun setExpectedStockDetails() {
-        val tempState = state.selectedStock?.getExpectedDetails(state.stockResultsData)
-            ?.let { state.copy(expectedResults = it) }
+    private fun setExpectedStockDetails(
+        stock: Stock? = null,
+        stockResultsData: StockResultsData? = null
+    ) {
+        var tempState: ResultsState? = null
+        tempState = if (stock != null && stockResultsData != null) {
+            stock.getExpectedDetails(stockResultsData = stockResultsData)
+                .let { state.copy(expectedResults = it) }
+        } else {
+            state.selectedStock?.getExpectedDetails(state.stockResultsData)
+                ?.let { state.copy(expectedResults = it) }
+        }
         if (tempState != null) {
             state = tempState
         }

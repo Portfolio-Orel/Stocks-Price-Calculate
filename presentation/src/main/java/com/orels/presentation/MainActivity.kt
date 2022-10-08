@@ -1,6 +1,7 @@
 package com.orels.presentation
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     darkIcons = MaterialTheme.colorScheme.background.luminance() > 0.5f
                 )
                 window.statusBarColor = MaterialTheme.colorScheme.background.toArgb()
-
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
