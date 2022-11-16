@@ -23,6 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ResultsViewModel @Inject constructor(
+
     private val getStockUseCase: GetStockUseCase
 ) : ViewModel() {
     var state by mutableStateOf(ResultsState())
@@ -39,9 +40,12 @@ class ResultsViewModel @Inject constructor(
                 )
                 is Resource.Loading -> state.copy(isLoading = true)
                 is Resource.Success -> {
-                    val stockResultsData = state.stockResultsData
-                    stockResultsData.startingPrice = result.data?.price ?: -1.0
-                    setExpectedStockDetails(stock = result.data, stockResultsData = stockResultsData)
+                    val stockResultsData: StockResultsData?
+                    stockResultsData = StockResultsData(result.data)
+                    setExpectedStockDetails(
+                        stock = result.data,
+                        stockResultsData = stockResultsData
+                    )
                     result.data?.let { setFields(stockResultsData = stockResultsData, it) }
                     state.copy(
                         isLoading = false,
@@ -58,8 +62,7 @@ class ResultsViewModel @Inject constructor(
             stockResultsDataFields = listOf(
                 StockResultsDataFields(
                     title = R.string.years, onChange = {
-                        val resultData = state.stockResultsData
-                        resultData.years = it
+                        stockResultsData.years = it
                         setExpectedStockDetails()
                     }, maxCharacters = 2,
                     defaultValue = 5.0
@@ -69,49 +72,49 @@ class ResultsViewModel @Inject constructor(
                         stockResultsData.expectedPE = it
                         setExpectedStockDetails()
                     }, maxCharacters = 3,
-                    defaultValue = stock.trailingPE ?: 15.0
+                    defaultValue = stockResultsData.expectedPE
                 ),
                 StockResultsDataFields(
                     title = R.string.profit_margin, onChange = {
                         stockResultsData.expectedProfitMargin = it
                         setExpectedStockDetails()
                     }, maxCharacters = 3,
-                    defaultValue = (stock.profitMargin ?: 0.0) * 100.0
+                    defaultValue = stockResultsData.expectedProfitMargin
                 ),
                 StockResultsDataFields(
                     title = R.string.shares_outstanding, onChange = {
                         stockResultsData.expectedSharesOutstanding = it
                         setExpectedStockDetails()
                     },
-                    defaultValue = stock.sharesOutstanding ?: 10.0
+                    defaultValue = stockResultsData.expectedSharesOutstanding
                 ),
                 StockResultsDataFields(
                     title = R.string.growth_rate, onChange = {
                         stockResultsData.expectedAnnualGrowthRate = it
                         setExpectedStockDetails()
                     },
-                    defaultValue = 10.0
+                    defaultValue = stockResultsData.expectedAnnualGrowthRate
                 ),
                 StockResultsDataFields(
                     title = R.string.minimum_irr, onChange = {
                         stockResultsData.expectedIRR = it
                         setExpectedStockDetails()
                     },
-                    defaultValue = 15.0
+                    defaultValue = stockResultsData.expectedIRR
                 ),
                 StockResultsDataFields(
                     title = R.string.shares_outstanding_reduction_rate, onChange = {
                         stockResultsData.expectedSharesOutstandingReduction = it
                         setExpectedStockDetails()
                     },
-                    defaultValue = 0.0
+                    defaultValue = stockResultsData.expectedSharesOutstandingReduction
                 ),
                 StockResultsDataFields(
                     title = R.string.projected_price, onChange = {
                         stockResultsData.startingPrice = it
                         setExpectedStockDetails()
                     },
-                    defaultValue = stock.price ?: 100.0
+                    defaultValue = stockResultsData.startingPrice
                 ),
             )
         )
@@ -121,10 +124,9 @@ class ResultsViewModel @Inject constructor(
         stock: Stock? = null,
         stockResultsData: StockResultsData? = null
     ) {
-        var tempState: ResultsState? = null
-        tempState = if (stock != null && stockResultsData != null) {
+        val tempState: ResultsState? = if (stock != null && stockResultsData != null) {
             stock.getExpectedDetails(stockResultsData = stockResultsData)
-                .let { state.copy(expectedResults = it) }
+                ?.let { state.copy(expectedResults = it) }
         } else {
             state.selectedStock?.getExpectedDetails(state.stockResultsData)
                 ?.let { state.copy(expectedResults = it) }

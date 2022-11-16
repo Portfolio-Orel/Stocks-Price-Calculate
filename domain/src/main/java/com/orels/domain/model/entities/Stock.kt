@@ -43,6 +43,9 @@ class Stock(
     val priceFmt: String?
         get() = financialData.currentPrice.fmt
 
+    val priceToFreeCashFlow: Double
+        get() = (summaryDetails.marketCap.raw ?: -1.0) / (financialData.freeCashflow.raw ?: 1.0)
+
     private fun getFreeCashflowYield(): Double? {
         val enterpriseValue = defaultKeyStatistics.enterpriseValue.raw
         val freeCashFlow = financialData.freeCashflow.raw
@@ -61,8 +64,9 @@ class Stock(
     }
 
     fun getExpectedDetails(
-        stockResultsData: StockResultsData,
-    ): ExpectedStockDetails {
+        stockResultsData: StockResultsData?,
+    ): ExpectedStockDetails? {
+        if (stockResultsData == null) return null
         with(stockResultsData) {
             val sharesOutstanding = stockResultsData.expectedSharesOutstanding
                 ?: defaultKeyStatistics.sharesOutstanding.raw

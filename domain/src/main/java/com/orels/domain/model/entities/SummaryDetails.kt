@@ -13,5 +13,6 @@ import java.util.*
 class SummaryDetails(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val trailingPE: Base = Base(),
-    val forwardPE: Base = Base()
+    val forwardPE: Base = Base(),
+    val marketCap: Base = Base()
 )

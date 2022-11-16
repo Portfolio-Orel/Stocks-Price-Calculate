@@ -12,7 +12,7 @@ import com.orels.domain.model.entities.StockResultsData
 
 data class ResultsState(
     val selectedStock: Stock? = null,
-    val stockResultsData: StockResultsData = StockResultsData(startingPrice = -1.0),
+    val stockResultsData: StockResultsData? = null,
     val stockResultsDataFields: List<StockResultsDataFields> = emptyList(),
     val expectedResults: ExpectedStockDetails = ExpectedStockDetails(),
 

@@ -21,11 +21,11 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getStock(ticker: String): Stock? {
         var stock = db.get(ticker = ticker)
-        if(stock == null) {
+        if (stock == null) {
             stock = api.getStockDetails(ticker = ticker).toStock()
         }
         db.insert(stock)
-         return stock
+        return stock
     }
 }
 
@@ -66,7 +66,8 @@ fun StockResponse.toStock(): Stock = Stock(
         priceToBook = defaultKeyStatistics?.priceToBook?.toBase() ?: Base()
     ), summaryDetails = SummaryDetails(
         trailingPE = summaryDetails?.trailingPE?.toBase() ?: Base(),
-        forwardPE = summaryDetails?.forwardPE?.toBase() ?: Base()
+        forwardPE = summaryDetails?.forwardPE?.toBase() ?: Base(),
+        marketCap = summaryDetails?.marketCap?.toBase() ?: Base()
     ),
     ticker = symbol ?: "",
     name = quoteType.longName ?: quoteType.shortName

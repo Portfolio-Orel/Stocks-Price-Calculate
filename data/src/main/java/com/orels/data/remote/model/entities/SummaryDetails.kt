@@ -8,5 +8,6 @@ import com.google.gson.annotations.SerializedName
  */
 class SummaryDetails(
     @SerializedName("trailingPE") val trailingPE: BaseResponse? = null,
-    @SerializedName("forwardPE") val forwardPE: BaseResponse
+    @SerializedName("forwardPE") val forwardPE: BaseResponse,
+    @SerializedName("marketCap") val marketCap: BaseResponse,
 )
