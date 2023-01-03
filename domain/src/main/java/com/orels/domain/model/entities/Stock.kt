@@ -16,7 +16,9 @@ class Stock(
     val name: String?,
     val financialData: FinancialData,
     val defaultKeyStatistics: DefaultKeyStatistics,
-    val summaryDetails: SummaryDetails
+    val summaryDetails: SummaryDetails,
+    val calendarEvents: CalendarEvents,
+    val savedInCacheTime: Long = System.currentTimeMillis(),
 ) {
     val forwardPe: Double?
         get() = defaultKeyStatistics.forwardPE.raw
@@ -54,6 +56,13 @@ class Stock(
         }
         return null
     }
+
+    fun isExpired(): Boolean =
+        calendarEvents.earnings.earningsDate.lastOrNull()?.raw?.let { lastEarnings ->
+            return lastEarnings > savedInCacheTime
+        } ?: false
+
+
 
     fun getFreeCashflowYieldFmt(): String? {
         val freeCashflowYield = getFreeCashflowYield()

@@ -14,7 +14,7 @@ import com.orels.domain.model.entities.Stock
 @Database(
     entities = [
         Stock::class
-    ], version = 1
+    ], version = 2
 )
 @TypeConverters(Converters::class)
 abstract class LocalDatabase : RoomDatabase() {

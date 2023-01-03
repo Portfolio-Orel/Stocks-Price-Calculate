@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main">ראשי</string>
+    <string name="error_occurred">קרתה תקלה</string>
+    <string name="free_cashflow_yield">"תשואת תזרים: "</string>
+    <string name="no_ticker">אין סימול</string>
+    <string name="price_to_buy">"מחיר קניה: "</string>
+    <string name="price_to_sell">"מחיר מכירה: "</string>
+    <string name="irr_">"תשואת שנתית: "</string>
+    <string name="hide_password">הסתר סיסמא</string>
+    <string name="show_password">הצג סיסמא</string>
+    <string name="stock_price">מחיר מניה</string>
+    <string name="results_screen">תוצאות</string>
+    <string name="stock_ticker">סימול מניה</string>
+    <string name="meta_ticker">META</string>
+    <string name="search_stock">חפש מניה</string>
+    <string name="error_empty_ticker_input">הסימול לא נמצא</string>
+    <string name="search">חפש</string>
+    <string name="error_no_stock_details">אין מידע על המניה</string>
+    <string name="pe">מכפיל רווח</string>
+    <string name="years">שנים</string>
+    <string name="profit_margin">שולי רווח</string>
+    <string name="shares_outstanding">מניות שהונפקו</string>
+    <string name="growth_rate">אחוז גדילה</string>
+    <string name="minimum_irr">תשואה שנתית מינימלית</string>
+    <string name="shares_outstanding_reduction_rate">שיעור הפחתת מניות</string>
+    <string name="projected_price">מחיר חזוי</string>
+    <string name="current_price_">"מחיר נוכחי: "</string>
+</resources>

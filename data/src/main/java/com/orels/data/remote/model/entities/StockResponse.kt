@@ -10,6 +10,7 @@ class StockResponse(
     @SerializedName("financialData") val financialData: FinancialData? = null,
     @SerializedName("defaultKeyStatistics") val defaultKeyStatistics: DefaultKeyStatistics? = null,
     @SerializedName("summaryDetails") val summaryDetails: SummaryDetails? = null,
+    @SerializedName("calendarEvents") val calendarEvents: CalendarEvents? = null,
     @SerializedName("symbol") val symbol: String? = null,
     @SerializedName("quoteType") val quoteType: QuoteType
 )

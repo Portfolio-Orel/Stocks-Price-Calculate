@@ -19,13 +19,14 @@ class RepositoryImpl @Inject constructor(
     private val db: StockDao = this.localDatabase.stockDao
 
 
-    override suspend fun getStock(ticker: String): Stock? {
-        var stock = db.get(ticker = ticker)
-        if (stock == null) {
-            stock = api.getStockDetails(ticker = ticker).toStock()
-        }
-        db.insert(stock)
-        return stock
+    override suspend fun getStock(ticker: String): Stock {
+//        var stock = db.get(ticker = ticker)
+//        if (stock == null || stock.isExpired()) {
+//            stock = api.getStockDetails(ticker = ticker).toStock()
+//        }
+//        db.insert(stock)
+        return api.getStockDetails(ticker = ticker).toStock()
+//        return stock
     }
 }
 
@@ -70,5 +71,11 @@ fun StockResponse.toStock(): Stock = Stock(
         marketCap = summaryDetails?.marketCap?.toBase() ?: Base()
     ),
     ticker = symbol ?: "",
-    name = quoteType.longName ?: quoteType.shortName
+    name = quoteType.longName ?: quoteType.shortName,
+    calendarEvents = CalendarEvents(
+        earnings = Earnings(
+            earningsDate = calendarEvents?.earnings?.earningsDate ?: emptyList(),
+        )
+    )
+
 )

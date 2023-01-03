@@ -3,6 +3,7 @@ package com.orels.data.local.type_converters
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.orels.domain.model.entities.CalendarEvents
 import com.orels.domain.model.entities.DefaultKeyStatistics
 import com.orels.domain.model.entities.FinancialData
 import com.orels.domain.model.entities.SummaryDetails
@@ -33,4 +34,12 @@ class Converters {
     @TypeConverter
     fun convertStringToSummaryDetails(value: String): SummaryDetails =
         Gson().fromJson(value, SummaryDetails::class.java)
+
+    @TypeConverter
+    fun convertCalendarEventsToString(calendarEvents: CalendarEvents): String =
+        Gson().toJson(calendarEvents)
+
+    @TypeConverter
+    fun convertStringToCalendarEvents(value: String): CalendarEvents =
+        Gson().fromJson(value, CalendarEvents::class.java)
 }

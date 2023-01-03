@@ -79,7 +79,8 @@ class ResultsViewModel @Inject constructor(
                         stockResultsData.expectedProfitMargin = it
                         setExpectedStockDetails()
                     }, maxCharacters = 3,
-                    defaultValue = stockResultsData.expectedProfitMargin
+                    defaultValue = stockResultsData.expectedProfitMargin,
+                    trailingIcon = R.drawable.percentage_round
                 ),
                 StockResultsDataFields(
                     title = R.string.shares_outstanding, onChange = {
@@ -93,28 +94,32 @@ class ResultsViewModel @Inject constructor(
                         stockResultsData.expectedAnnualGrowthRate = it
                         setExpectedStockDetails()
                     },
-                    defaultValue = stockResultsData.expectedAnnualGrowthRate
+                    defaultValue = stockResultsData.expectedAnnualGrowthRate,
+                    trailingIcon = R.drawable.percentage_round
                 ),
                 StockResultsDataFields(
                     title = R.string.minimum_irr, onChange = {
                         stockResultsData.expectedIRR = it
                         setExpectedStockDetails()
                     },
-                    defaultValue = stockResultsData.expectedIRR
+                    defaultValue = stockResultsData.expectedIRR,
+                    trailingIcon = R.drawable.percentage_round
                 ),
                 StockResultsDataFields(
                     title = R.string.shares_outstanding_reduction_rate, onChange = {
                         stockResultsData.expectedSharesOutstandingReduction = it
                         setExpectedStockDetails()
                     },
-                    defaultValue = stockResultsData.expectedSharesOutstandingReduction
+                    defaultValue = stockResultsData.expectedSharesOutstandingReduction,
+                    trailingIcon = R.drawable.percentage_round
                 ),
                 StockResultsDataFields(
-                    title = R.string.projected_price, onChange = {
+                    title = R.string.projected_price,
+                    onChange = {
                         stockResultsData.startingPrice = it
                         setExpectedStockDetails()
                     },
-                    defaultValue = stockResultsData.startingPrice
+                    defaultValue = stockResultsData.startingPrice,
                 ),
             )
         )
@@ -141,5 +146,6 @@ class StockResultsDataFields(
     @StringRes val title: Int,
     val onChange: (Double) -> Unit,
     val defaultValue: Double,
-    val maxCharacters: Int = 100
+    val maxCharacters: Int = 100,
+    val trailingIcon: Int? = null
 )
