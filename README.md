@@ -1,6 +1,6 @@
 # Stock Price Calculator
 
-**Stock Price Calculator** is a powerful financial application designed to help investors and financial enthusiasts calculate future prices of stocks. This application uses a wide array of financial parameters including PE ratio, growth rate, profit margin, shares reduction, and Internal Rate of Return (IRR) to generate accurate stock price forecasts.
+**Stock Price Calculator** is a powerful financial application designed to help investors and financial enthusiasts calculate future prices of stocks. This application uses a wide array of financial parameters including PE ratio, growth rate, profit margin, shares reduction rate, and Internal Rate of Return (IRR) to generate accurate stock price forecasts.
 
 ## Table of Contents
 
