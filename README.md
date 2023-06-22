@@ -1,6 +1,6 @@
-# Stock Predictor 1.0
+# Stock Price Calculator
 
-**Stock Predictor 1.0** is a powerful financial application designed to help investors and financial enthusiasts calculate future prices of stocks. This application uses a wide array of financial parameters including PE ratio, growth rate, profit margin, shares reduction, and Internal Rate of Return (IRR) to generate accurate stock price forecasts.
+**Stock Price Calculator** is a powerful financial application designed to help investors and financial enthusiasts calculate future prices of stocks. This application uses a wide array of financial parameters including PE ratio, growth rate, profit margin, shares reduction, and Internal Rate of Return (IRR) to generate accurate stock price forecasts.
 
 ## Table of Contents
 
@@ -12,7 +12,7 @@
 
 ## Features
 
-Stock Predictor 1.0 comes with several exciting features:
+Stock Price Calculator comes with several exciting features:
 
 - **Stock Search:** Search for any publicly listed stock by name or ticker symbol.
 - **Future Price Calculator:** Calculate the future price of a stock using financial parameters.
@@ -25,7 +25,7 @@ Stock Predictor 1.0 comes with several exciting features:
 
 ### Installation
 
-Download Stock Predictor 1.0 from our official website or the app store compatible with your device. Install the app following the prompts on your screen.
+Download Stock Price Calculator from our official website or the app store compatible with your device. Install the app following the prompts on your screen.
 
 ### Search for Stock
 
@@ -47,12 +47,4 @@ Hit the 'Calculate' button and allow the app to compute the future price of your
 
 ## Support
 
-For any difficulties encountered while using the app, please reach out to our support team at support@stockpredictor.com. 
-
-## Contributions
-
-We welcome contributions from the community. If you're a developer and interested in contributing, please see our contribution guidelines.
-
-## License
-
-Stock Predictor 1.0 is licensed under the MIT License. Please see the LICENSE file for more information.
+For any difficulties encountered while using the app, please reach out to our support team at orelsmail@gmail.com. 
