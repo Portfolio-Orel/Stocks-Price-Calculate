@@ -22,6 +22,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.gson.Gson
+import com.orels.domain.model.entities.Stock
 import com.orels.presentation.R
 import com.orels.presentation.ui.components.Input
 import com.orels.presentation.ui.components.TextStyle

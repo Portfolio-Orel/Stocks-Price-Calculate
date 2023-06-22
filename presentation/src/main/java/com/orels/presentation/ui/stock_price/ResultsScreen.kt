@@ -1,8 +1,16 @@
 package com.orels.presentation.ui.stock_price
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -15,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -24,11 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.orels.domain.model.entities.CaseType
 import com.orels.domain.model.entities.ExpectedStockDetails
 import com.orels.domain.model.entities.Stock
 import com.orels.presentation.R
 import com.orels.presentation.ui.components.Input
-import java.util.*
 
 /**
  * @author Orel Zilberman
@@ -67,7 +76,9 @@ fun ResultsScreen(
         state.selectedStock?.let {
             Content(
                 stock = it,
-                expectedStockDetails = state.expectedResults,
+                expectedStockDetailsWorst = state.expectedResultsWorst,
+                expectedStockDetailsBase = state.expectedResultsBase,
+                expectedStockDetailsBest = state.expectedResultsBest,
                 fields = state.stockResultsDataFields
             )
         }
@@ -78,11 +89,17 @@ fun ResultsScreen(
 @Composable
 fun Content(
     stock: Stock,
-    expectedStockDetails: ExpectedStockDetails?,
-    fields: List<StockResultsDataFields>
+    expectedStockDetailsWorst: ExpectedStockDetails?,
+    expectedStockDetailsBase: ExpectedStockDetails?,
+    expectedStockDetailsBest: ExpectedStockDetails?,
+    fields: Map<CaseType, List<StockResultsDataFields>>
 ) {
 
-    if (expectedStockDetails == null) {
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val columnPadding = 16.dp
+    val columnWidth = screenWidth / 3 - columnPadding
+
+    if (expectedStockDetailsWorst == null || expectedStockDetailsBase == null || expectedStockDetailsBest == null) {
         Text(
             modifier = Modifier.padding(16.dp),
             text = stringResource(R.string.error_no_stock_details),
@@ -135,8 +152,8 @@ fun Content(
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
                     ),
                     value = StockText(
-                        text = expectedStockDetails.priceToBuyByEarningsFmt,
-                        color = if (expectedStockDetails.priceToBuyByEarnings >= (stock.price
+                        text = expectedStockDetailsBase.priceToBuyByEarningsFmt,
+                        color = if (expectedStockDetailsBase.priceToBuyByEarnings >= (stock.price
                                 ?: 99999.toDouble())
                         ) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error
                     )
@@ -147,46 +164,58 @@ fun Content(
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
                     ),
                     value = StockText(
-                        text = expectedStockDetails.irrFmt,
+                        text = expectedStockDetailsBase.irrFmt,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 )
             }
             Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(1f)
-                    .zIndex(1f)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
             ) {
-                fields.forEach { field ->
-                    Input(
-                        title = stringResource(id = field.title),
-                        placeholder = field.defaultValue.toString(),
-                        isPassword = false,
-                        keyboardOptions = KeyboardOptions(
-                            capitalization = KeyboardCapitalization.None,
-                            autoCorrect = true,
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Next
-                        ),
-                        leadingIcon = {},
-                        trailingIcon = { tint ->
-                            field.trailingIcon?.let { painterResource(id = it) }?.let {
-                                Icon(
-                                    painter = it,
-                                    modifier = Modifier.size(24.dp),
-                                    contentDescription = null,
-                                    tint = tint
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxSize()
+                        .zIndex(1f),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    fields.entries.forEach { entry ->
+                        Column(
+                            modifier = Modifier.width(columnWidth),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            entry.value.forEach { field ->
+                                Input(
+                                    title = stringResource(id = field.title),
+                                    placeholder = field.defaultValue,
+                                    isPassword = false,
+                                    keyboardOptions = KeyboardOptions(
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                        keyboardType = KeyboardType.Number,
+                                        imeAction = ImeAction.Next
+                                    ),
+                                    leadingIcon = {},
+                                    trailingIcon = { tint ->
+                                        field.trailingIcon?.let { painterResource(id = it) }?.let {
+                                            Icon(
+                                                painter = it,
+                                                modifier = Modifier.size(24.dp),
+                                                contentDescription = null,
+                                                tint = tint
+                                            )
+                                        }
+                                    },
+                                    onTextChange = {
+                                        field.onChange(it.toDoubleOrNull() ?: -1.0, entry.key)
+                                    },
                                 )
                             }
-                        },
-                        onTextChange = {
-                            field.onChange(it.toDoubleOrNull() ?: -1.0)
-                        },
-                    )
+                        }
+                    }
                 }
             }
         }
@@ -196,8 +225,8 @@ fun Content(
 @Composable
 fun Data(
     title: StockText,
+    modifier: Modifier = Modifier,
     value: StockText = StockText(color = MaterialTheme.colorScheme.onBackground),
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
     Row(modifier) {
         Text(

@@ -9,12 +9,12 @@ import okhttp3.Response
  */
 class AuthInterceptor : Interceptor {
 
-    override fun intercept(chain: Interceptor.Chain): Response {
-        return chain.request()
+    override fun intercept(chain: Interceptor.Chain): Response =
+        chain.request()
             .newBuilder()
             .addHeader("X-RapidAPI-Key", "d5521624a8msh964b295244bd92bp1b86e0jsn6dee14943944")
             .addHeader("X-RapidAPI-Host", "yh-finance.p.rapidapi.com")
             .build()
             .run { chain.proceed(this) }
-    }
+
 }

@@ -74,12 +74,10 @@ class Stock(
 
     fun getExpectedDetails(
         stockResultsData: StockResultsData?,
-    ): ExpectedStockDetails? {
-        if (stockResultsData == null) return null
+    ): ExpectedStockDetails {
+        if(stockResultsData == null) return ExpectedStockDetails()
         with(stockResultsData) {
-            val sharesOutstanding = stockResultsData.expectedSharesOutstanding
-                ?: defaultKeyStatistics.sharesOutstanding.raw
-                ?: 0.0
+            val sharesOutstanding = expectedSharesOutstanding
             val currentRevenue = financialData.totalRevenue.raw ?: 0.0
             val newOutstandingShares =
                 sharesOutstanding * (1 - expectedSharesOutstandingReduction / 100 / 1).pow(years)
@@ -112,7 +110,7 @@ class Stock(
             return ExpectedStockDetails(
                 currentPrice = financialData.currentPrice.raw ?: 0.0,
                 irr = newIRR,
-                sharesOutstanding = newOutstandingShares,
+                sharesOutstanding = newOutstandingShares.toInt(),
                 priceToBuyByEarnings = priceToBuyByEarnings,
                 priceToBuyByCashflow = priceToBuyByCashflow,
                 priceToSellByEarnings = priceToSell,
@@ -121,3 +119,5 @@ class Stock(
         }
     }
 }
+
+private fun Int.pow(n: Int): Int = toDouble().pow(n.toDouble()).toInt()
