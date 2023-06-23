@@ -26,4 +26,7 @@
     <string name="shares_outstanding_reduction_rate_short">Shares RR</string>
     <string name="projected_price_short">P. Price</string>
     <string name="current_price_">Current price: </string>
+    <string name="price">Price</string>
+    <string name="buy_">Buy: </string>
+    <string name="sell_">"Sell: "</string>
 </resources>

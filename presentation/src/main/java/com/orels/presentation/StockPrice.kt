@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.orels.presentation.ui.components.CustomScaffold
+import com.orels.presentation.ui.main.MainScreen
 import com.orels.presentation.ui.stock_price.ResultsScreen
 import com.orels.presentation.util.Screen
 
@@ -49,13 +50,13 @@ fun StockPrice(
                 ),
                 navController = navHostController, startDestination = Screen.Main.route
             ) {
-//                composable(route = Screen.Main.route) { MainScreen(navController = navHostController) }
-                composable(route = Screen.Main.route) {
-                    ResultsScreen(
-                        ticker = "META",
-                        navController = navHostController,
-                    )
-                }
+                composable(route = Screen.Main.route) { MainScreen(navController = navHostController) }
+//                composable(route = Screen.Main.route) {
+//                    ResultsScreen(
+//                        ticker = "META",
+//                        navController = navHostController,
+//                    )
+//                }
                 composable(route = Screen.Results.route + "/{ticker}",
                     arguments = listOf(
                         navArgument("ticker") {

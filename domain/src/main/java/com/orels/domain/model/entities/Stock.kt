@@ -80,32 +80,32 @@ class Stock(
             val sharesOutstanding = expectedSharesOutstanding
             val currentRevenue = financialData.totalRevenue.raw ?: 0.0
             val newOutstandingShares =
-                sharesOutstanding * (1 - expectedSharesOutstandingReduction / 100 / 1).pow(years)
+                sharesOutstanding * (1 - expectedSharesOutstandingReduction / 100.0 / 1).pow(years)
 
             // Earnings
             val newFutureRevenue =
-                currentRevenue * ((1 + expectedAnnualGrowthRate / 100).pow(years))
-            val newFutureEarnings = newFutureRevenue * (expectedProfitMargin / 100)
+                currentRevenue * ((1 + expectedAnnualGrowthRate / 100.0).pow(years))
+            val newFutureEarnings = newFutureRevenue * ((expectedProfitMargin / 100.0))
             val newFutureEPS = newFutureEarnings / newOutstandingShares
             val newFuturePrice: Double = if (newFutureEPS < 0 || expectedPE < 0) {
                 0.0
             } else {
                 newFutureEPS * expectedPE
             }
-            val newIRR = ((newFuturePrice / startingPrice).pow(1 / years) - 1) * 100
-            val priceToBuyByEarnings = newFuturePrice / (expectedIRR / 100 + 1).pow(years)
+            val newIRR = ((newFuturePrice / startingPrice).pow(1.0 / years) - 1) * 100
+            val priceToBuyByEarnings = newFuturePrice / (expectedIRR / 100.0 + 1).pow(years)
             val priceToSell = newFuturePrice / (12.5 / 100 + 1).pow(years)
 
             // Cashflow
-            val newFutureCashflow = newFutureRevenue * (expectedCashflowMargin / 100)
+            val newFutureCashflow = newFutureRevenue * (expectedCashflowMargin / 100.0)
             val newCashflowPerShare = newFutureCashflow / sharesOutstanding
             val newFuturePriceByCashflow = newCashflowPerShare * expectedPriceToFreeCashflow
             val newIRRByCashflow =
                 ((newFuturePriceByCashflow / startingPrice).pow(1 / years) - 1) * 100
             val priceToBuyByCashflow =
-                newFuturePriceByCashflow / (newIRRByCashflow / 100 + 1).pow(years)
+                newFuturePriceByCashflow / (newIRRByCashflow / 100.0 + 1).pow(years)
             val priceToSellByCashflow =
-                newFuturePriceByCashflow / (expectedIRR / 100 + 1).pow(years)
+                newFuturePriceByCashflow / (expectedIRR / 100.0 + 1).pow(years)
 
             return ExpectedStockDetails(
                 currentPrice = financialData.currentPrice.raw ?: 0.0,

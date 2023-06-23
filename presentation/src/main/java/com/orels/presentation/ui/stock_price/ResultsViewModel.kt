@@ -10,7 +10,6 @@ import com.orels.domain.model.entities.CaseType
 import com.orels.domain.model.entities.ExpectedStockDetails
 import com.orels.domain.model.entities.Stock
 import com.orels.domain.model.entities.StockResultsData
-import com.orels.domain.model.entities.toWorstCase
 import com.orels.domain.use_case.Resource
 import com.orels.domain.use_case.get_stock.GetStockUseCase
 import com.orels.presentation.R
@@ -37,119 +36,115 @@ class ResultsViewModel @Inject constructor(
             return
         }
         getStockUseCase(ticker = ticker).onEach { result ->
-            state = when (result) {
-                is Resource.Error -> state.copy(
+            when (result) {
+                is Resource.Error -> state = state.copy(
                     isLoading = false, error = R.string.error_occurred
                 )
 
-                is Resource.Loading -> state.copy(isLoading = true)
+                is Resource.Loading -> state = state.copy(isLoading = true)
                 is Resource.Success -> {
-                    val stockResultsDataWorst =
-                        StockResultsData(result.data, caseType = CaseType.Worst)
-                    val stockResultsDataBase = StockResultsData(result.data)
-                    val stockResultsDataBest =
-                        StockResultsData(result.data, caseType = CaseType.Best)
-
-                    setExpectedStockDetails(
-                        stock = result.data,
-                        stockResultsData = stockResultsDataWorst,
-                        caseType = CaseType.Worst
-                    )
-                    setExpectedStockDetails(
-                        stock = result.data,
-                        stockResultsData = stockResultsDataBase,
-                        caseType = CaseType.Base
-                    )
-                    setExpectedStockDetails(
-                        stock = result.data,
-                        stockResultsData = stockResultsDataBest,
-                        caseType = CaseType.Best
-                    )
-
                     result.data?.let {
+                        val stockResultsDataWorst =
+                            StockResultsData(it, caseType = CaseType.Worst)
+                        val stockResultsDataBase = StockResultsData(it, caseType = CaseType.Base)
+                        val stockResultsDataBest =
+                            StockResultsData(it, caseType = CaseType.Best)
+
                         state = state.copy(
+                            expectedResultsWorst = getExpectedStockDetails(
+                                stock = it,
+                                stockResultsData = stockResultsDataWorst,
+                                caseType = CaseType.Worst
+                            ),
+                            expectedResultsBase = getExpectedStockDetails(
+                                stock = it,
+                                stockResultsData = stockResultsDataBase,
+                                caseType = CaseType.Base
+                            ),
+                            expectedResultsBest = getExpectedStockDetails(
+                                stock = it,
+                                stockResultsData = stockResultsDataBest,
+                                caseType = CaseType.Best
+                            ),
+                            isLoading = false,
                             stockResultsDataFields = mapOf(
-                                CaseType.Best to
-                                        getFields(stockResultsData = stockResultsDataBest),
-                                CaseType.Base to
-                                        getFields(stockResultsData = stockResultsDataBase),
                                 CaseType.Worst to
                                         getFields(stockResultsData = stockResultsDataWorst),
-                            )
+                                CaseType.Base to
+                                        getFields(stockResultsData = stockResultsDataBase),
+                                CaseType.Best to
+                                        getFields(stockResultsData = stockResultsDataBest),
+                            ),
+                            selectedStock = it,
+                            stockResultsDataWorst = stockResultsDataWorst,
+                            stockResultsDataBase = stockResultsDataBase,
+                            stockResultsDataBest = stockResultsDataBest
                         )
+
                     }
-                    state.copy(
-                        isLoading = false,
-                        selectedStock = result.data,
-                        stockResultsDataWorst = stockResultsDataWorst,
-                        stockResultsDataBase = stockResultsDataBase,
-                        stockResultsDataBest = stockResultsDataBest
-                    )
                 }
             }
         }.launchIn(viewModelScope)
     }
 
     private fun getFields(stockResultsData: StockResultsData): List<StockResultsDataFields> =
-        with(stockResultsData.toWorstCase()) {
-            listOf(
-                StockResultsDataFields(
-                    title = R.string.years, onChange = { value, caseType ->
-                        stockResultsData.years = value.toInt()
-                        setExpectedStockDetails(caseType = caseType)
-                    }, maxCharacters = 2,
-                    defaultValue = "5"
-                ),
-                StockResultsDataFields(
-                    title = R.string.pe, onChange = { value, caseType ->
-                        stockResultsData.expectedPE = value.toInt()
-                        setExpectedStockDetails(caseType = caseType)
-                    }, maxCharacters = 3,
-                    defaultValue = stockResultsData.expectedPE.removeDecimal()
-                ),
-                StockResultsDataFields(
-                    title = R.string.profit_margin_short, onChange = { value, caseType ->
-                        stockResultsData.expectedProfitMargin = value.toInt()
-                        setExpectedStockDetails(caseType = caseType)
-                    }, maxCharacters = 3,
-                    defaultValue = stockResultsData.expectedProfitMargin.removeDecimal(),
-                    trailingIcon = R.drawable.percentage_round
-                ),
-                StockResultsDataFields(
-                    title = R.string.growth_rate_short, onChange = { value, caseType ->
-                        stockResultsData.expectedAnnualGrowthRate = value.toInt()
-                        setExpectedStockDetails(caseType = caseType)
-                    },
-                    defaultValue = stockResultsData.expectedAnnualGrowthRate.removeDecimal(),
-                    trailingIcon = R.drawable.percentage_round
-                ),
-                StockResultsDataFields(
-                    title = R.string.minimum_irr, onChange = { value, caseType ->
-                        stockResultsData.expectedIRR = value.toInt()
-                        setExpectedStockDetails(caseType = caseType)
-                    },
-                    defaultValue = stockResultsData.expectedIRR.removeDecimal(),
-                    trailingIcon = R.drawable.percentage_round
-                ),
-                StockResultsDataFields(
-                    title = R.string.shares_outstanding_reduction_rate_short,
-                    onChange = { value, caseType ->
-                        stockResultsData.expectedSharesOutstandingReduction = value.toInt()
-                        setExpectedStockDetails(caseType = caseType)
-                    },
-                    defaultValue = stockResultsData.expectedSharesOutstandingReduction.removeDecimal(),
-                    trailingIcon = R.drawable.percentage_round
-                ),
-                StockResultsDataFields(
-                    title = R.string.projected_price_short,
-                    onChange = { value, caseType ->
-                        stockResultsData.startingPrice = value
-                        setExpectedStockDetails(caseType = caseType)
-                    },
-                    defaultValue = stockResultsData.startingPrice.removeDecimal(),
-                ),
-            )
-        }
+        listOf(
+            StockResultsDataFields(
+                title = R.string.years, onChange = { value, caseType ->
+                    stockResultsData.years = value.toInt()
+                    setExpectedStockDetails(caseType = caseType)
+                }, maxCharacters = 2,
+                defaultValue = "5"
+            ),
+            StockResultsDataFields(
+                title = R.string.pe, onChange = { value, caseType ->
+                    stockResultsData.expectedPE = value.toInt()
+                    setExpectedStockDetails(caseType = caseType)
+                }, maxCharacters = 3,
+                defaultValue = stockResultsData.expectedPE.removeDecimal()
+            ),
+            StockResultsDataFields(
+                title = R.string.profit_margin_short, onChange = { value, caseType ->
+                    stockResultsData.expectedProfitMargin = value.toInt()
+                    setExpectedStockDetails(caseType = caseType)
+                }, maxCharacters = 3,
+                defaultValue = stockResultsData.expectedProfitMargin.removeDecimal(),
+                trailingIcon = R.drawable.percentage_round
+            ),
+            StockResultsDataFields(
+                title = R.string.growth_rate_short, onChange = { value, caseType ->
+                    stockResultsData.expectedAnnualGrowthRate = value.toInt()
+                    setExpectedStockDetails(caseType = caseType)
+                },
+                defaultValue = stockResultsData.expectedAnnualGrowthRate.removeDecimal(),
+                trailingIcon = R.drawable.percentage_round
+            ),
+            StockResultsDataFields(
+                title = R.string.minimum_irr, onChange = { value, caseType ->
+                    stockResultsData.expectedIRR = value.toInt()
+                    setExpectedStockDetails(caseType = caseType)
+                },
+                defaultValue = stockResultsData.expectedIRR.removeDecimal(),
+                trailingIcon = R.drawable.percentage_round
+            ),
+            StockResultsDataFields(
+                title = R.string.shares_outstanding_reduction_rate_short,
+                onChange = { value, caseType ->
+                    stockResultsData.expectedSharesOutstandingReduction = value.toInt()
+                    setExpectedStockDetails(caseType = caseType)
+                },
+                defaultValue = stockResultsData.expectedSharesOutstandingReduction.removeDecimal(),
+                trailingIcon = R.drawable.percentage_round
+            ),
+            StockResultsDataFields(
+                title = R.string.projected_price_short,
+                onChange = { value, caseType ->
+                    stockResultsData.startingPrice = value
+                    setExpectedStockDetails(caseType = caseType)
+                },
+                defaultValue = stockResultsData.startingPrice.removeDecimal(),
+            ),
+        )
 
     private fun setExpectedStockDetails(
         caseType: CaseType,
@@ -166,6 +161,7 @@ class ResultsViewModel @Inject constructor(
                     )
                 )
             }
+
             CaseType.Base -> {
                 state = state.copy(
                     expectedResultsBase = getExpectedStockDetails(
@@ -175,6 +171,7 @@ class ResultsViewModel @Inject constructor(
                     )
                 )
             }
+
             CaseType.Worst -> {
                 state = state.copy(
                     expectedResultsWorst = getExpectedStockDetails(

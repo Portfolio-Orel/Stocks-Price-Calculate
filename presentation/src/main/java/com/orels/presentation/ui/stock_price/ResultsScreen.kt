@@ -110,15 +110,16 @@ fun Content(
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.Top)
         ) {
             Column(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.background.copy(alpha = 0.8f))
                     .zIndex(2f)
+                    .padding(top = 6.dp)
                     .imePadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Top)
             ) {
                 Data(
                     title = StockText(
@@ -136,38 +137,6 @@ fun Content(
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 )
-                Data(
-                    title = StockText(
-                        text = stringResource(R.string.free_cashflow_yield),
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-                    ),
-                    value = StockText(
-                        text = stock.getFreeCashflowYieldFmt() ?: "-",
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                )
-                Data(
-                    title = StockText(
-                        text = stringResource(R.string.price_to_buy),
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-                    ),
-                    value = StockText(
-                        text = expectedStockDetailsBase.priceToBuyByEarningsFmt,
-                        color = if (expectedStockDetailsBase.priceToBuyByEarnings >= (stock.price
-                                ?: 99999.toDouble())
-                        ) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error
-                    )
-                )
-                Data(
-                    title = StockText(
-                        text = stringResource(R.string.irr_),
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-                    ),
-                    value = StockText(
-                        text = expectedStockDetailsBase.irrFmt,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                )
             }
             Column(
                 Modifier
@@ -176,17 +145,59 @@ fun Content(
             ) {
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 8.dp)
                         .fillMaxSize()
                         .zIndex(1f),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     fields.entries.forEach { entry ->
+                        val expectedStockDetails = when (entry.key) {
+                            CaseType.Worst -> expectedStockDetailsWorst
+                            CaseType.Base -> expectedStockDetailsBase
+                            CaseType.Best -> expectedStockDetailsBest
+                        }
                         Column(
                             modifier = Modifier.width(columnWidth),
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                            horizontalAlignment = Alignment.Start,
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
+                            Data(
+                                title = StockText(
+                                    text = stringResource(R.string.buy_),
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                ),
+                                value = StockText(
+                                    text = expectedStockDetails.priceToBuyByEarningsFmt,
+                                    color = if (expectedStockDetails.priceToBuyByEarnings >= (stock.price
+                                            ?: 99999.0)
+                                    ) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error
+                                ),
+                                dataFontSize = DataFontSize.Small
+                            )
+                            Data(
+                                title = StockText(
+                                    text = stringResource(R.string.sell_),
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                ),
+                                value = StockText(
+                                    text = expectedStockDetails.priceToSellFmt,
+                                    color = if (expectedStockDetails.priceToSellByEarnings >= (stock.price
+                                            ?: 99999.toDouble())
+                                    ) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error
+                                ),
+                                dataFontSize = DataFontSize.Small
+                            )
+                            Data(
+                                title = StockText(
+                                    text = stringResource(R.string.irr_),
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                ),
+                                value = StockText(
+                                    text = expectedStockDetails.irrFmt,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                ),
+                                dataFontSize = DataFontSize.Small
+                            )
                             entry.value.forEach { field ->
                                 Input(
                                     title = stringResource(id = field.title),
@@ -227,17 +238,22 @@ fun Data(
     title: StockText,
     modifier: Modifier = Modifier,
     value: StockText = StockText(color = MaterialTheme.colorScheme.onBackground),
+    dataFontSize: DataFontSize = DataFontSize.Large
 ) {
+    val typography = when (dataFontSize) {
+        DataFontSize.Small -> MaterialTheme.typography.bodyLarge
+        DataFontSize.Large -> MaterialTheme.typography.titleLarge
+    }
     Row(modifier) {
         Text(
             text = title.text,
-            style = MaterialTheme.typography.titleLarge,
+            style = typography,
             color = title.color
         )
         Text(
             modifier = Modifier.padding(horizontal = 4.dp),
             text = value.text,
-            style = MaterialTheme.typography.titleLarge,
+            style = typography,
             color = value.color
         )
     }
@@ -247,3 +263,8 @@ class StockText(
     val text: String = "",
     val color: Color
 )
+
+enum class DataFontSize {
+    Small,
+    Large
+}
