@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Stock-Price</string>
     <string name="local_db_name">stock_price_local_db</string>
+    <string name="facebook_app_id">794402518730855</string>
+    <string name="fb_login_protocol_scheme">fb123456</string>
 </resources>

@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         minSdk 23
-        targetSdk 33
+        targetSdk 30
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -97,6 +97,18 @@ dependencies {
 
     // SwipeRefreshLayout
     implementation "com.google.accompanist:accompanist-swiperefresh:0.24.8-beta"
+
+
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.23.1"
+// Facebook Authentication
+    implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+
+// Import the BoM for the Firebase platform
+    implementation platform("com.google.firebase:firebase-bom:32.1.1")
+
+// Add the dependencies for the Firebase Authentication and Firebase Core
+    implementation "com.google.firebase:firebase-auth-ktx"
+
 
     implementation project(':domain')
 }

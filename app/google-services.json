@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "444410494110",
+    "project_id": "stockprice-49270",
+    "storage_bucket": "stockprice-49270.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444410494110:android:73b5e30fafd4a867d00f8f",
+        "android_client_info": {
+          "package_name": "com.orels.stock_price"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444410494110-ggbn364kkkh1g9m34mrbvi5bh9augq9b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwY11BPM_yhepsA81DbXAc3c3fGShncQ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444410494110-ggbn364kkkh1g9m34mrbvi5bh9augq9b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

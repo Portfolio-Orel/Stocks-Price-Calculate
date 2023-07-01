@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main">main</string>
+    <string name="facebook_client_token">b306a1d02166da80c56974a809265d4a</string>
     <string name="error_occurred">An error has occurred</string>
     <string name="no_ticker">No ticker</string>
     <string name="free_cashflow_yield">Free Cashflow Yield: </string>
