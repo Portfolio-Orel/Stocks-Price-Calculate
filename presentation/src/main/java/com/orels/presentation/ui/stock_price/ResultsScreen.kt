@@ -110,7 +110,7 @@ fun Content(
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.Top)
+            verticalArrangement = Arrangement.spacedBy(18.dp, Alignment.Top)
         ) {
             Column(
                 modifier = Modifier
@@ -130,7 +130,7 @@ fun Content(
                 Data(
                     title = StockText(
                         text = stringResource(R.string.current_price_),
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.9f)
                     ),
                     value = StockText(
                         text = "${stock.priceFmt ?: 0}$",
@@ -164,7 +164,7 @@ fun Content(
                             Data(
                                 title = StockText(
                                     text = stringResource(R.string.buy_),
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.9f)
                                 ),
                                 value = StockText(
                                     text = expectedStockDetails.priceToBuyByEarningsFmt,
@@ -177,20 +177,18 @@ fun Content(
                             Data(
                                 title = StockText(
                                     text = stringResource(R.string.sell_),
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.9f)
                                 ),
                                 value = StockText(
                                     text = expectedStockDetails.priceToSellFmt,
-                                    color = if (expectedStockDetails.priceToSellByEarnings >= (stock.price
-                                            ?: 99999.toDouble())
-                                    ) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error
+                                    color = MaterialTheme.colorScheme.onBackground
                                 ),
                                 dataFontSize = DataFontSize.Small
                             )
                             Data(
                                 title = StockText(
                                     text = stringResource(R.string.irr_),
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.9f)
                                 ),
                                 value = StockText(
                                     text = expectedStockDetails.irrFmt,
