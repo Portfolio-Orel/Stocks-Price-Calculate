@@ -108,7 +108,7 @@ dependencies {
 
 // Add the dependencies for the Firebase Authentication and Firebase Core
     implementation "com.google.firebase:firebase-auth-ktx"
-
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
 
     implementation project(':domain')
 }
